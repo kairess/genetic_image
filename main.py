@@ -119,6 +119,8 @@ if __name__ == '__main__':
       p.close()
       break
 
+    # results.append([best_fitness, best_genome, best_out])
+
     new_fitnesses, new_genomes, new_outs = zip(*results)
 
     best_result = sorted(zip(new_fitnesses, new_genomes, new_outs), key=lambda x: x[0], reverse=True)
