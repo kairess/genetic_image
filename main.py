@@ -69,14 +69,15 @@ def compute_fitness(genome):
 
   for gene in genome:
     cv2.circle(out, center=tuple(gene.center), radius=gene.radius, color=(int(gene.color[0]), int(gene.color[1]), int(gene.color[2])), thickness=-1)
-  
+
   # mean squared error
   fitness = 255. / compare_mse(img, out)
 
   return fitness, out
 
 # compute population
-def compute_population(genome):
+def compute_population(g):
+  genome = deepcopy(g)
   # mutation
   if len(genome) < 200:
     for gene in genome:
@@ -119,7 +120,7 @@ if __name__ == '__main__':
       p.close()
       break
 
-    # results.append([best_fitness, best_genome, best_out])
+    results.append([best_fitness, best_genome, best_out])
 
     new_fitnesses, new_genomes, new_outs = zip(*results)
 
@@ -137,8 +138,8 @@ if __name__ == '__main__':
 
     cv2.imshow('best out', best_out)
     if cv2.waitKey(1) == ord('q'):
-      p.close()
-      break
+     p.close()
+     break
 
   cv2.imshow('best out', best_out)
   cv2.waitKey(0)
