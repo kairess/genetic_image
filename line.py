@@ -8,6 +8,8 @@ filepath = sys.argv[1]
 filename, ext = os.path.splitext(os.path.basename(filepath))
 
 img = cv2.imread(filepath)
+edges = cv2.Canny(img, threshold1=100, threshold2=150)
+edges = cv2.dilate(edges, np.ones((3,3), np.uint8), iterations = 1)
 height, width, channels = img.shape
 
 # hyperparameters
@@ -40,31 +42,31 @@ class Gene():
 
     self.pt1[0] = random.randint(
       np.clip(int(self.pt1[0] * (1 - mutation_size)), 0, width),
-      np.clip(int(self.pt1[0] * (1 + mutation_size)), 0, height)
+      np.clip(int(self.pt1[0] * (1 + mutation_size)), 0, width)
     )
     self.pt1[1] = random.randint(
-      np.clip(int(self.pt1[1] * (1 - mutation_size)), 0, width),
+      np.clip(int(self.pt1[1] * (1 - mutation_size)), 0, height),
       np.clip(int(self.pt1[1] * (1 + mutation_size)), 0, height)
     )
 
     self.pt2[0] = random.randint(
       np.clip(int(self.pt2[0] * (1 - mutation_size)), 0, width),
-      np.clip(int(self.pt2[0] * (1 + mutation_size)), 0, height)
+      np.clip(int(self.pt2[0] * (1 + mutation_size)), 0, width)
     )
     self.pt2[1] = random.randint(
-      np.clip(int(self.pt2[1] * (1 - mutation_size)), 0, width),
+      np.clip(int(self.pt2[1] * (1 - mutation_size)), 0, height),
       np.clip(int(self.pt2[1] * (1 + mutation_size)), 0, height)
     )
 
 # compute fitness
 def compute_fitness(genome):
-  out = np.zeros((height, width, channels), dtype=np.uint8) * 255
+  out = np.zeros((height, width), dtype=np.uint8) * 255
 
   for gene in genome:
     cv2.line(out, pt1=tuple(gene.pt1), pt2=tuple(gene.pt2), color=(255,255,255), thickness=1, lineType=cv2.LINE_AA)
 
   # mean squared error
-  fitness = 255. / compare_mse(img, out)
+  fitness = 255. / compare_mse(edges, out)
 
   return fitness, out
 
