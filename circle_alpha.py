@@ -48,7 +48,7 @@ class Gene():
           int(self.center[1] * (1 + mutation_size))),
         0, height)
       ])
-    elif r < 75: # color
+    elif r < 0.75: # color
       self.color = np.array([
         np.clip(random.randint(
           int(self.color[0] * (1 - mutation_size)),
